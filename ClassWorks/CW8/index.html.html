@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<title>Remote URL or Local file </title>
+
+	<style>
+		body { max-width: 500px; }
+		div { margin: 12px 0; }
+		img {
+			max-width: 100%;
+			border: 1px solid darkgray;
+		}
+		#remote {
+			width: 290px;
+			font: 13px arial, sans-serif;
+			margin: 14px 0;
+			border: 1px solid darkgray;
+			padding: 5px;
+		}
+		#sample, #out { overflow-x: auto; }
+		#disp1 { color: blue; }
+	</style>
+</head>
+
+<body>
+<h2 id=title></h2>
+
+<div>
+	URL:
+	<input type=text id=remote onchange='shaFromInput(this.value)'> <br>
+	<input type=file id=button onchange='shaFromInput(this.files[0])'> <br> <br>
+	<button onclick="compareShaValues()">SHA Değerlerini Kıyasla</button><br>
+</div>
+
+<hr>
+<b>Sample code</b>
+<pre id=sample></pre>
+<hr>
+<p>Ref: <a href="Reading_files">Reading files</a>
+</p>
+
+<script>
+	"use strict";
+	const RDR = new FileReader(), toHex = b=>b.toString(16).padStart(2,'0');
+
+	let urlShaResult;
+	let fileShaResult;
+
+	function bufferToHex(buf) {
+		return [...new Uint8Array(buf)].map(toHex).join('')
+	}
+
+	async function shaFromBuffer(buf) { //ArrayBuffer or ArrayBufferView
+		return await crypto.subtle.digest('SHA-1', buf)
+				.then(b => {return bufferToHex(b);})
+				.catch(console.error);
+	}
+
+	async function shaFromURL(u) { //URL or string
+		return await fetch(u).then(r => r.arrayBuffer())
+				.then(t => { return shaFromBuffer(t); });
+	}
+
+	async function shaFromFile(f) { //File or Blob
+		return await f.arrayBuffer().then(t => { return shaFromBuffer(t); })
+	}
+
+	function urlIsValid(URL){
+		return true;
+	}
+
+	async function shaFromInput(value){
+
+		if(value instanceof File)
+		{
+			fileShaResult = await shaFromFile(value);
+		}
+		else if(typeof (value) === "string" && urlIsValid(value))
+		{
+			urlShaResult = await shaFromURL(value)
+		}
+		else
+			{
+			console.error("Input must be of type File or a valid URL!")
+		}
+	}
+
+	function compareShaValues(){
+		if(urlShaResult === undefined || urlShaResult === "" || fileShaResult === undefined || fileShaResult === ""){
+			console.log("Dosya yüklemeniz gerekmektedir!")
+			return false;
+		}
+
+		let sameShaValues = fileShaResult === urlShaResult;
+
+		if(sameShaValues)
+			console.log("Dosyalar birbirine eşit.")
+		else
+			console.log("Dosyalar birbirine eşit değil!")
+
+		return sameShaValues;
+	}
+
+
+
+</script>
+
+</body>
+</html>
