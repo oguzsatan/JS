@@ -1,13 +1,41 @@
 <!DOCTYPE html>
 <html>
 
+    <head>
+    <link rel="icon" sizes="192x192" href="images/icon192.png">
+    <link rel="manifest" href="manifest.json">
+    <style>
+        table {
+
+            font-family: arial, sans-serif;
+            border-collapse: collapse;
+            width: 500px;
+
+        }
+
+        td,
+        th {
+            border: 1px solid #dddddd;
+            text-align: left;
+            padding: 8px;
+        }
+
+        tr:nth-child(even) {
+            background-color: #dddddd;
+        }
+    </style>
+
+
+
+</head>
+    
 <body>
 
     <div>
       
         <h2>Classworks</h2>
 
-        <table>
+        <table class="cw">
             <tr>
                 <th>CW</th>
                 <th>CW Name</th>
@@ -24,7 +52,7 @@
 
         <h2>Homeworks</h2>
 
-        <table>
+        <table class="hw">
             <tr>
                 <th>HW</th>
                 <th>HW Name</th>
