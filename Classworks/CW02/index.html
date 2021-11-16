@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  
+  <title> CW2</title>
+
+  <style>
+   body { max-width: 440px; }
+    input { width: 50px }
+    .out {
+        font-size: 18px;
+        background: blue;
+        color: white;
+        text-align: center;
+        padding: 10px;
+    }
+    
+  </style>
+</head>
+
+<body>
+  
+  <hr />
+  <b>CW2</b>
+  <pre>
+    function sum(my_array){
+      let sum=0;
+      for(let i=0; i<my_array.length; i++){
+          sum+=my_array[i];
+}
+return sum;
+}
+
+function range(start,end,step){
+let my_array=[];
+
+if(end > start && step > 0 ){
+    for(let i = start; i<=end; i+=step) {
+        my_array.push(i);
+    }
+}
+else if (end < start && step <0){
+  for(let i = start; i>=end; i+=step){
+    my_array.push(i);
+  }
+}
+else{
+  console.log("Girdiğiniz değerleri kontrol ediniz");
+
+}
+return my_array;
+}
+sum(range(1,10,2));
+
+>25
+
+  </pre>
+
+  <script>
+   function sum(my_array){
+      let sum=0;
+      for(let i=0; i<my_array.length; i++){
+          sum+=my_array[i];
+}
+return sum;
+}
+
+function range(start,end,step){
+let my_array=[];
+
+if(end > start && step > 0 ){
+    for(let i = start; i<=end; i+=step) {
+        my_array.push(i);
+    }
+}
+else if (end < start && step <0){
+  for(let i = start; i>=end; i+=step){
+    my_array.push(i);
+  }
+}
+else{
+  console.log("Girdiğiniz değerleri kontrol ediniz");
+
+}
+return my_array;
+}
+  </script>
+
+</body>
+
+</html>
