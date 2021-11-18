@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width">
+  <link rel="icon" href="/305/images/icon192.png">
+  <title>Class Work 10 - Event listeners</title>
+
+  <style>
+    /* CSS comment */
+    body {
+      max-width: 440px;
+    }
+
+    #url {
+      width: 190px;
+    }
+
+    span,
+    #url {
+      color: blue;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- HTML comment: Modify all items marked xxx -->
+
+  <h2 id=title></h2>
+  <p title="Battery level">
+    Batarya Durumu:
+  <div id=level style="color:blue"></div>
+  <div id=charge style="color:blue"></div>
+  <div id=disc style="color:blue"></div>
+
+  </p>
+  <p title="Latitude/Longitude">
+    Online Durumu: <span id=online style="color:blue">??</span>
+  </p>
+  <p>
+    Klavye Son Basılan Buton : <span id=keyboard style="color:blue">??</span>
+  </p>
+  <hr />
+  <b>Sample code</b>
+  <pre id=sample>
+    function init() {
+      navigator.getBattery().then(b => {
+        b.onlevelchange = e =>
+          level.innerText =
+          'Batarya Durumu: ' + 100 * b.level + '%'
+
+        b.onchargingchange = e => charge.innerText = 'Şarjda Mı?: ' + (b.charging ? "Şarjda" : "Şarjda Değil")
+
+
+      })
+      ononline = e => online.innerText = "Online"
+      onoffline = e => online.innerText = "Online Değil"
+      onkeydown = e => keyboard.innerText = e.key
+      onkeyup = e => keyboard.innerText = e.key
+    }
+    
+    sample.innerText = init + '\n';
+    init();
+  </pre>
+
+  <hr />
+
+  <script>
+    "use strict";
+    // JavaScript comment
+
+    function init() {
+      navigator.getBattery().then(b => {
+        b.onlevelchange = e =>
+          level.innerText =
+          'Batarya Durumu: ' + 100 * b.level + '%'
+
+        b.onchargingchange = e => charge.innerText = 'Şarjda Mı?: ' + (b.charging ? "Şarjda" : "Şarjda Değil")
+
+
+      })
+      ononline = e => online.innerText = "Online"
+      onoffline = e => online.innerText = "Online Değil"
+      onkeydown = e => keyboard.innerText = e.key
+      onkeyup = e => keyboard.innerText = e.key
+    }
+    
+    sample.innerText = init + '\n';
+    init();
+  </script>
+
+</body>
+
+</html>
