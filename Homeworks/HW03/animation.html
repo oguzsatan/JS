@@ -1,0 +1,63 @@
+<html lang="en">
+
+<head> <title>Oğuz Kaan Satan - JS Animation</title> </head>
+
+<body>
+
+    <div id="box">
+
+    </div>
+
+    <script>
+        let box = document.getElementById('box');
+        let renkler = ['red', 'blue', 'green', 'yellow', 'pink', 'gray', 'black', 'purple']
+        box.style.top = "250px";
+        box.style.left = "500px";
+
+        function doMagic(){
+            // Animasyon Süresi
+            box.style.WebkitTransitionDuration='750ms';
+
+            // Dönme Oranı
+            box.style.webkitTransform = 'rotate(' + Math.random() * 720 + 'deg)';
+
+            // Kutu Rengi
+            let secilecekRenkIndex = Math.floor(Math.random() * renkler.length) // 0'dan 3'e kadar sayı üretir
+            box.style.backgroundColor = renkler[secilecekRenkIndex]
+
+            // Genişlik ve Yükseklik
+            box.style.width = Math.floor(Math.random() * 400) + "px";
+            box.style.height = Math.floor(Math.random() * 400) + "px";
+
+            // Yukarıya ve Sola Olan Uzaklık
+            box.style.top = Math.random() * 200 + 50
+            box.style.left = Math.random() * 1000 + 100
+        }
+
+        setInterval(doMagic, 750);
+    </script>
+
+    <style>
+        html{
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        body{
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            position: relative;
+        }
+        #box{
+            width: 250px;
+            height: 250px;
+            background-color: #5599b9;
+            border: solid 5px #1a3047;
+            position: absolute;
+        }
+    </style>
+
+</body>
+</html>
