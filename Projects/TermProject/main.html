@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Quiz App by Oğuz</title>
+    <link rel="stylesheet" href="main.css"/>
+</head>
+
+<body>
+    <div id="quiz-card">
+        <div id="lives">
+            ❤ 3
+        </div>
+        <div id="question">
+
+        </div>
+        <div id="options">
+            <div class="option">
+                <div>A)</div>
+                <div id="opt-1"></div>
+            </div>
+            <div class="option">
+                <div>B)</div>
+                <div id="opt-2"></div>
+            </div>
+            <div class="option">
+                <div>C)</div>
+                <div id="opt-3"></div>
+            </div>
+            <div class="option">
+                <div>D)</div>
+                <div id="opt-4"></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="final-score" hidden>
+
+    </div>
+
+    <div id="notification" hidden>
+
+    </div>
+
+    <script>
+        const questions = [
+            {
+                "difficulty": 7,
+                "question": "İslamiyeti kabul eden ilk Türk Devleti hangisidir?",
+                "correct_answer": "Karahanlılar",
+                "answers": [
+                    "Oğuzlar",
+                    "Mengücekler",
+                    "Karahanlılar",
+                    "Selçuklu"
+                ]
+            },
+            {
+                "difficulty": 5,
+                "question": "Abd başkanı Trump ile Kuzey Kore lideri Kim Jong Un arasında Haziran 2018'de gerçekleşen görüşme hangi ülkede yapılmıştır?",
+                "correct_answer": "Singapur",
+                "answers": [
+                    "Singapur",
+                    "Çin",
+                    "Japonya",
+                    "Filipinler"
+                ]
+            },
+            {
+                "difficulty": 9,
+                "question": "Tiyatroda kendi kendine konuşma olarak bilinen türün adı nedir?",
+                "correct_answer": "Monolog",
+                "answers": [
+                    "Tırad",
+                    "Monolog",
+                    "Aksiyon",
+                    "Doğaçlama"
+                ]
+            },
+            {
+                "difficulty": 5,
+                "question": "Sinekli Bakkal” Romanının Yazarı Hangisidir?",
+                "correct_answer": "Halide Edip Adıvar",
+                "answers": [
+                    "Ziya Gökalp",
+                    "Ömer Seyfettin",
+                    "Reşat Nuri Güntekin",
+                    "Halide Edip Adıvar"
+                ]
+            },
+            {
+                "difficulty": 3,
+                "question": "İlk Çağ Uygarlıklarından Hangisi Yazıyı İcat Etmiştir?",
+                "correct_answer": "Sümerler",
+                "answers": [
+                    "Hititler",
+                    "Urartular",
+                    "Sümerler",
+                    "Elamlar"
+                ]
+            },
+            {
+                "difficulty": 5,
+                "question": "Romen Rakamında Hangi Sayı Yoktur?",
+                "correct_answer": "0",
+                "answers": [
+                    "0",
+                    "50",
+                    "100",
+                    "1000"
+                ]
+            },
+            {
+                "difficulty": 3,
+                "question": "Hangi İlimizde Demiryolu Yoktur?",
+                "correct_answer": "Muğla",
+                "answers": [
+                    "Aydın",
+                    "Muğla",
+                    "Kütahya",
+                    "Batman"
+                ]
+            },
+            {
+                "difficulty": 6,
+                "question": "Aspirinin Hammaddesi Nedir?",
+                "correct_answer": "Söğüt",
+                "answers": [
+                    "Meşe",
+                    "Köknar",
+                    "Kavak",
+                    "Söğüt"
+                ]
+            },
+            {
+                "difficulty": 5,
+                "question": "Bir Gün Kaç Saniyedir?",
+                "correct_answer": "86400",
+                "answers": [
+                    "84800",
+                    "88600",
+                    "86400",
+                    "86000"
+                ]
+            },
+            {
+                "difficulty": 8,
+                "question": "Hangisi Mevlâna Celâleddin-i Rumî tarafından yazılmamıştır?",
+                "correct_answer": "Risaletü'n-Nushiye",
+                "answers": [
+                    "Risaletü'n-Nushiye",
+                    "Mesnevi",
+                    "Mektubât",
+                    "Fıhi Ma Fıh"
+                ]
+            },
+            {
+                "difficulty": 7,
+                "question": "Hangisi Hacı Bektaş Veli'nin ünlü eseridir?",
+                "correct_answer": "Makalat",
+                "answers": [
+                    "Kabusname",
+                    "Budalaname",
+                    "Fütüvvetname",
+                    "Makalat"
+                ]
+            },
+            {
+                "difficulty": 9,
+                "question": "Hangi Ülkenin İki Tane Başkenti Vardır?",
+                "correct_answer": "Güney Afrika",
+                "answers": [
+                    "Güney Afrika",
+                    "Senegal",
+                    "El Salvador",
+                    "Kamboçya"
+                ]
+            },
+        ];
+        const nextQuestionTimer = 3;
+        let totalLives = 3;
+        let currentQuestionNumber = 0;
+        let totalPoints = 0;
+        let waitingForNextQuestion = false;
+
+        let questionField = document.getElementById("question");
+        let option1Field = document.getElementById("opt-1");
+        let option2Field = document.getElementById("opt-2");
+        let option3Field = document.getElementById("opt-3");
+        let option4Field = document.getElementById("opt-4");
+        let totalLivesField = document.getElementById("lives");
+
+        function submitAnswer(e){
+            if(waitingForNextQuestion)
+                return;
+
+            waitingForNextQuestion = true;
+            let usersAnswer = document.getElementById(e.target.id).innerHTML;
+
+            if(checkAnswer(usersAnswer) === false)
+                removeLife();
+
+            if( (questionNumber >= questions.length) || (totalLives < 1) ) {
+                setFinalScore();
+                return;
+            }
+
+            addResultColors(usersAnswer);
+
+            setNextQuestionTimer(nextQuestionTimer);
+
+        }
+
+        function addResultColors(usersAnswer){
+            let options = document.getElementsByClassName("option");
+
+            Object.entries(options).forEach(([key, value]) => {
+                if(usersAnswer === getCorrectAnswer()){
+                    if(value.lastElementChild.innerHTML === usersAnswer)
+                        value.classList.add("true");
+                }
+                else if(usersAnswer !== getCorrectAnswer()){
+                    if(value.lastElementChild.innerHTML === usersAnswer)
+                        value.classList.add("false");
+                    else if(value.lastElementChild.innerHTML === getCorrectAnswer()){
+                        value.classList.add("true");
+                    }
+                }
+            })
+        }
+
+        function removeResultColors(){
+            let options = document.getElementsByClassName("option");
+            Object.entries(options).forEach(([key, value]) => {
+                value.classList.remove("true");
+                value.classList.remove("false");
+            })
+        }
+
+        function getCorrectAnswer(){
+            return questions[currentQuestionNumber-1].correct_answer;
+        }
+
+        function getDifficulty(){
+            return questions[currentQuestionNumber-1].difficulty;
+        }
+
+        function checkAnswer(usersAnswer) {
+            if(usersAnswer === getCorrectAnswer()) {
+                totalPoints += getDifficulty();
+                return true;
+            }
+            return false;
+        }
+
+        function nextQuestion(){
+            removeResultColors();
+
+            questionNumber = ++currentQuestionNumber;
+
+            newQuestion = questions[questionNumber-1];
+
+            questionField.innerHTML = "Soru " + questionNumber + ") " + newQuestion.question;
+            option1Field.innerHTML = newQuestion.answers[0];
+            option2Field.innerHTML = newQuestion.answers[1];
+            option3Field.innerHTML = newQuestion.answers[2];
+            option4Field.innerHTML = newQuestion.answers[3];
+        }
+
+        function setFinalScore(){
+            let quizCardField = document.getElementById("quiz-card");
+            let finalScoreField = document.getElementById("final-score");
+
+            quizCardField.hidden = true;
+            finalScoreField.hidden = false;
+            finalScoreField.style.display = "flex";
+
+            finalScoreField.innerHTML = "Your final score is " + totalPoints;
+        }
+
+        function setNextQuestionTimer(timeLeft){
+            let notification = document.getElementById("notification");
+            notification.hidden = false;
+            notification.innerHTML = "Next question in " + timeLeft + "...";
+            setTimeout(function () {
+                if(timeLeft < 1){
+                    notification.hidden = true;
+                    nextQuestion();
+                    waitingForNextQuestion = false;
+                    return;
+                }
+                else
+                    setNextQuestionTimer(timeLeft - 1)
+            }, 1000);
+        }
+
+        function removeLife(){
+            totalLivesField.innerHTML = "❤ " + --totalLives;
+        }
+
+        option1Field.addEventListener("click", submitAnswer);
+        option2Field.addEventListener("click", submitAnswer);
+        option3Field.addEventListener("click", submitAnswer);
+        option4Field.addEventListener("click", submitAnswer);
+
+        nextQuestion();
+        totalLivesField.innerHTML = "❤ " + totalLives;
+
+    </script>
+
+</body>
+
+</html>
