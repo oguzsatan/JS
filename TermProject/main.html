@@ -6,6 +6,7 @@
     <meta charset="UTF-8">
     <title>Quiz App by Oğuz</title>
     <link rel="stylesheet" href="main.css"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" charset="UTF-8">
 </head>
 
 <body>
@@ -198,7 +199,7 @@
     function submitAnswer(e){
         if(waitingForNextQuestion)
             return;
-
+       // console.log(e); 
         waitingForNextQuestion = true;
         let usersAnswer = document.getElementById(e.target.id).innerHTML;
 
@@ -226,7 +227,7 @@
                 option.classList.add("true");
 
             // Kullanıcı yanlış yanıtladıysa yanlış şıkkı boya
-            if( (usersAnswer !== getCorrectAnswer()) && (usersAnswer === option.lastElementChild.innerHTML) )
+            if( (usersAnswer !== getCorrectAnswer())  && (usersAnswer === option.lastElementChild.innerHTML) )
                 option.classList.add("false");
 
         })
